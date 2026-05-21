@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get('SECRET', ')6+vf9(1tihg@u8!+(0abk+y*#$3r$(-d=g5qhm@1
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('PROD_MODE', "false").lower() == "false"
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0'] + [h for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h]
 
 # Application definition
 INSTALLED_APPS = [
@@ -250,7 +250,7 @@ OAUTH_PROVIDERS = {
 ALLOWED_HOSTS.append(HACKATHON_DOMAIN)
 
 # Deployment configurations for proxy pass and csrf
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+CSRF_TRUSTED_ORIGINS = ['https://' + h for h in ALLOWED_HOSTS if h and h not in ('localhost', '127.0.0.1', '0.0.0.0')]
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
